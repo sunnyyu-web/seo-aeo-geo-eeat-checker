@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>æç« åè³ªå¯©æ¥å·¥å· Â· SEO / AEO / GEO / EEAT</title>
+<title>文章品質審查工具 · SEO / AEO / GEO / EEAT</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F5F4F0;--s:#fff;--s2:#F0EEE9;--bd:#E2DFD8;--tx:#1A1916;--t2:#6B6860;--t3:#9E9B94;--ac:#2A5FE8;--abg:#EEF3FD;--gn:#1A7F5A;--gbg:#E6F5EE;--rd:#C0392B;--r:10px;--rl:16px;--sh:0 1px 3px rgba(0,0,0,.06)}
@@ -58,122 +58,114 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 </head>
 <body>
 <div class="pg">
-
 <div class="hdr">
   <div class="logo">S4</div>
   <div>
-    <h1>æç« åè³ªå¯©æ¥å·¥å·</h1>
-    <p>SEO Â· AEO Â· GEO Â· EEAT åç¶­åº¦åæ Â· çµæåæ­¥ Google Sheets</p>
+    <h1>文章品質審查工具</h1>
+    <p>SEO · AEO · GEO · EEAT 四維度分析 · 結果同步 Google Sheets</p>
   </div>
 </div>
-
 <div class="steps">
-  <div class="step"><div class="sn">1</div><div class="st"><strong>å¡«å¥è³è¨</strong><span>URLãééµå­</span></div></div>
-  <div class="step"><div class="sn">2</div><div class="st"><strong>è¤è£½è«æ±</strong><span>ç¢çæç¤ºè©</span></div></div>
-  <div class="step"><div class="sn">3</div><div class="st"><strong>è²¼å° Claude</strong><span>åå¾å ±å</span></div></div>
-  <div class="step"><div class="sn">4</div><div class="st"><strong>åæ­¥ Sheets</strong><span>èªåå¯«å¥è¡¨å®</span></div></div>
+  <div class="step"><div class="sn">1</div><div class="st"><strong>填入資訊</strong><span>URL、關鍵字</span></div></div>
+  <div class="step"><div class="sn">2</div><div class="st"><strong>複製請求</strong><span>產生提示詞</span></div></div>
+  <div class="step"><div class="sn">3</div><div class="st"><strong>貼到 Claude</strong><span>取得報告</span></div></div>
+  <div class="step"><div class="sn">4</div><div class="st"><strong>同步 Sheets</strong><span>自動寫入表單</span></div></div>
 </div>
-
 <div class="card">
-  <span class="lbl">æç«  URL <span class="req">*</span> <span class="hint">ï¼å¿å¡«ï¼</span></span>
+  <span class="lbl">文章 URL <span class="req">*</span> <span class="hint">（必填）</span></span>
   <div style="margin-bottom:12px">
     <input type="text" id="url" placeholder="https://yoursite.com/article-slug" oninput="ce()">
-    <div class="ue" id="ue">â  è«å¡«å¥æç«  URL æè½é²è¡å¯©æ¥</div>
+    <div class="ue" id="ue">⚠ 請填入文章 URL 才能進行審查</div>
   </div>
-  <span class="lbl" style="margin-bottom:4px">è£åå§å®¹ <span class="hint">ï¼é¸å¡«ï½Meta DescriptionãH2 çµæ§ç­ï¼</span></span>
-  <textarea id="ex" placeholder="é¸å¡«ï¼è²¼å¥ Meta DescriptionãH2 æ¨é¡åè¡¨..."></textarea>
+  <span class="lbl" style="margin-bottom:4px">補充內容 <span class="hint">（選填｜Meta Description、H2 結構等）</span></span>
+  <textarea id="ex" placeholder="選填：貼入 Meta Description、H2 標題列表..."></textarea>
   <div class="r2">
     <div class="mf">
-      <span class="lbl">æ ¸å¿ééµå­ <span class="hint">ï¼ä¾ Sheets è¨éï¼</span></span>
-      <input type="text" id="kw" placeholder="ä¾ï¼å°ä¸­è¢ç«è²">
+      <span class="lbl">核心關鍵字 <span class="hint">（供 Sheets 記錄）</span></span>
+      <input type="text" id="kw" placeholder="例：台中螢火蟲">
     </div>
     <div class="mf">
-      <span class="lbl">è² è²¬äºº <span class="hint">ï¼ä¾ Sheets è¨éï¼</span></span>
-      <input type="text" id="rv" placeholder="ä¾ï¼å°æ">
+      <span class="lbl">負責人 <span class="hint">（供 Sheets 記錄）</span></span>
+      <input type="text" id="rv" placeholder="例：小明">
     </div>
   </div>
 </div>
-
 <div class="card" style="margin-bottom:12px">
-  <span class="lbl" style="margin-bottom:8px">å¯©æ¥ç¶­åº¦</span>
+  <span class="lbl" style="margin-bottom:8px">審查維度</span>
   <div class="chips">
-    <div class="chip on" data-d="seo" onclick="tog(this)"><span class="pip"></span>SEO æå°å¼æ</div>
-    <div class="chip on" data-d="aeo" onclick="tog(this)"><span class="pip"></span>AEO ç­æ¡å¼æ</div>
-    <div class="chip on" data-d="geo" onclick="tog(this)"><span class="pip"></span>GEO çæå¼å¼æ</div>
-    <div class="chip on" data-d="eeat" onclick="tog(this)"><span class="pip"></span>EEAT å¯ä¿¡åº¦</div>
+    <div class="chip on" data-d="seo" onclick="tog(this)"><span class="pip"></span>SEO 搜尋引擎</div>
+    <div class="chip on" data-d="aeo" onclick="tog(this)"><span class="pip"></span>AEO 答案引擎</div>
+    <div class="chip on" data-d="geo" onclick="tog(this)"><span class="pip"></span>GEO 生成式引擎</div>
+    <div class="chip on" data-d="eeat" onclick="tog(this)"><span class="pip"></span>EEAT 可信度</div>
   </div>
 </div>
-
-<button class="run" onclick="gen()">ç¢çåæè«æ± â</button>
-
+<button class="run" onclick="gen()">產生分析請求 →</button>
 <div class="ph2" id="ph2">
   <div class="card">
-    <span class="lbl" style="margin-bottom:6px">ð åæè«æ±ï¼è¤è£½å¾è²¼å° Claudeï¼</span>
+    <span class="lbl" style="margin-bottom:6px">📋 分析請求（複製後貼到 Claude）</span>
     <textarea id="out" readonly style="min-height:150px;font-size:12px;font-family:'DM Mono',monospace"></textarea>
     <div class="br">
-      <button class="bg" id="cb" onclick="cp()">è¤è£½åæè«æ±</button>
-      <a href="https://claude.ai" target="_blank" class="bs">éå Claude â</a>
+      <button class="bg" id="cb" onclick="cp()">複製分析請求</button>
+      <a href="https://claude.ai" target="_blank" class="bs">開啟 Claude ↗</a>
     </div>
   </div>
-
   <div class="sc">
-    <h3>â Claude åæå®æå¾ â åæ­¥çµæ</h3>
+    <h3>✅ Claude 分析完成後 — 同步結果</h3>
     <ol>
-      <li>è¤è£½ Claude åè¦ä¸­ç <code>{"scores":...}</code> JSON</li>
-      <li>è²¼å¥ä¸æ¹æ¬ä½ï¼é»ãåæ­¥è³ Sheetsã</li>
+      <li>複製 Claude 回覆中的 <code>{"scores":...}</code> JSON</li>
+      <li>貼入下方欄位，點「同步至 Sheets」</li>
     </ol>
-    <span class="lbl" style="margin-bottom:5px">è²¼å¥ Claude åè¦ç JSON</span>
+    <span class="lbl" style="margin-bottom:5px">貼入 Claude 回覆的 JSON</span>
     <textarea id="ji" style="min-height:80px;font-size:12px;font-family:'DM Mono',monospace" placeholder='{"scores":{"seo":82,"aeo":75,"geo":70,"eeat":80},"score_overall":77,...}'></textarea>
     <div class="br">
-      <button class="bg" id="sb" onclick="sync()">åæ­¥è³ Sheets â</button>
-      <a class="bs" href="https://docs.google.com/spreadsheets/d/1SgJnAcFQhU3pNkPv2fIj6KrrgzRdRsSJq58qOIpPkEw" target="_blank">éå Sheets ð</a>
+      <button class="bg" id="sb" onclick="sync()">同步至 Sheets ↗</button>
+      <a class="bs" href="https://docs.google.com/spreadsheets/d/1SgJnAcFQhU3pNkPv2fIj6KrrgzRdRsSJq58qOIpPkEw" target="_blank">開啟 Sheets 📊</a>
     </div>
     <div class="msg" id="msg"></div>
   </div>
 </div>
-
 </div>
 <script>
 const SU='https://script.google.com/macros/s/AKfycbzlzK6RofYI3od-ZXreI_HlAVNxXTYaCM7nJknaG2O4d1aXravjP-4nwOpxeCIMii6W/exec';
 const dims=new Set(['seo','aeo','geo','eeat']);
-const DL={seo:'SEO æå°å¼æåªå',aeo:'AEO ç­æ¡å¼æåªå',geo:'GEO çæå¼å¼æåªå',eeat:'EEAT å¯ä¿¡åº¦'};
+const DL={seo:'SEO 搜尋引擎優化',aeo:'AEO 答案引擎優化',geo:'GEO 生成式引擎優化',eeat:'EEAT 可信度'};
 function tog(el){const d=el.dataset.d;dims.has(d)?dims.delete(d):dims.add(d);el.classList.toggle('on',dims.has(d));}
 function ce(){document.getElementById('ue').style.display='none';document.getElementById('url').style.borderColor='';}
 function gen(){
   const url=document.getElementById('url').value.trim();
   if(!url){document.getElementById('ue').style.display='block';document.getElementById('url').style.borderColor='var(--rd)';document.getElementById('url').focus();return;}
-  if(!dims.size){alert('è«è³å°å¾é¸ä¸åå¯©æ¥ç¶­åº¦');return;}
+  if(!dims.size){alert('請至少勾選一個審查維度');return;}
   const ex=document.getElementById('ex').value.trim(),kw=document.getElementById('kw').value.trim(),rv=document.getElementById('rv').value.trim();
-  const ds=[...dims].map(d=>DL[d]).join('ã');
-  let p=`è«å¹«æå¯©æ¥éç¯æç« ç ${ds} è¡¨ç¾ï¼\n\næç«  URLï¼${url}\n`;
-  if(kw)p+=`æ ¸å¿ééµå­ï¼${kw}\n`;
-  if(rv)p+=`è² è²¬äººï¼${rv}\n`;
-  if(ex)p+=`\nè£åè³è¨ï¼\n${ex}\n`;
-  p+=`\nè«ä¾åç¶­åº¦æä¾ï¼â  0-100 å â¡ è³å° 6 é å·é«æª¢æ¥ï¼âz`é/â ï¸å¾æ¹å/âæªéæ¨ï¼â¢ æ¹åå»ºè­°ä¸å¥è©±\n`;
-  p+=`\næå¾è¼¸åº JSONï¼\n{"scores":{"seo":åæ¸,"aeo":åæ¸,"geo":åæ¸,"eeat":åæ¸},"score_overall":å æ¬åæ¸,"details":{"seo":{"tip":"å»ºè­°"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["åªåæ¹å1","åªåæ¹å2","åªåæ¹å3","åªåæ¹å4","åªåæ¹å5"]}\nå æ¬ï¼SEO 30%+AEO 25%+GEO 25%+EEAT 20%`;
+  const ds=[...dims].map(d=>DL[d]).join('、');
+  let p='請幫我審查這篇文章的 '+ds+' 表現：\n\n文章 URL：'+url+'\n';
+  if(kw)p+='核心關鍵字：'+kw+'\n';
+  if(rv)p+='負責人：'+rv+'\n';
+  if(ex)p+='\n補充資訊：\n'+ex+'\n';
+  p+='\n請依各維度提供：① 0-100 分 ② 至少 6 項具體檢查（✅通過/⚠️待改善/❌未達標）③ 改善建議一句話\n';
+  p+='\n最後輸出 JSON：\n{"scores":{"seo":分數,"aeo":分數,"geo":分數,"eeat":分數},"score_overall":加權分數,"details":{"seo":{"tip":"建議"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["優先改善1","優先改善2","優先改善3","優先改善4","優先改善5"]}\n加權：SEO 30%+AEO 25%+GEO 25%+EEAT 20%';
   document.getElementById('out').value=p;
   document.getElementById('ph2').classList.add('show');
   setTimeout(()=>document.getElementById('ph2').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
 function cp(){
   navigator.clipboard.writeText(document.getElementById('out').value).then(()=>{
-    const b=document.getElementById('cb');b.textContent='å·²è¤è£½ â';
-    setTimeout(()=>b.textContent='è¤è£½åæè«æ±',2000);
+    const b=document.getElementById('cb');b.textContent='已複製 ✓';
+    setTimeout(()=>b.textContent='複製分析請求',2000);
   });
 }
 async function sync(){
   const raw=document.getElementById('ji').value.trim();
-  if(!raw){showMsg('è«åè²¼å¥ Claude åè¦ç JSON çµæ','err');return;}
+  if(!raw){showMsg('請先貼入 Claude 回覆的 JSON 結果','err');return;}
   let d;
   try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');d=JSON.parse(raw.slice(s,e+1));}
-  catch{showMsg('JSON æ ¼å¼é¯èª¤ï¼è«ç¢ºèªå®æ´è²¼å¥','err');return;}
-  const btn=document.getElementById('sb');btn.disabled=true;btn.textContent='åæ­¥ä¸­...';
+  catch{showMsg('JSON 格式錯誤，請確認完整貼入','err');return;}
+  const btn=document.getElementById('sb');btn.disabled=true;btn.textContent='同步中...';
   const p={timestamp:new Date().toLocaleString('zh-TW'),keyword:document.getElementById('kw').value||'',reviewer:document.getElementById('rv').value||'',url:document.getElementById('url').value||'',score_seo:d.scores?.seo||0,score_aeo:d.scores?.aeo||0,score_geo:d.scores?.geo||0,score_eeat:d.scores?.eeat||0,score_overall:d.score_overall||0,tip_seo:d.details?.seo?.tip||'',tip_aeo:d.details?.aeo?.tip||'',tip_geo:d.details?.geo?.tip||'',tip_eeat:d.details?.eeat?.tip||'',priority_1:(d.priorities||[])[0]||'',priority_2:(d.priorities||[])[1]||'',priority_3:(d.priorities||[])[2]||'',priority_4:(d.priorities||[])[3]||'',priority_5:(d.priorities||[])[4]||''};
   try{
     await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    showMsg('â å·²æååæ­¥è³ Google Sheetsï¼','ok');
-    btn.textContent='å·²åæ­¥ â';setTimeout(()=>{btn.textContent='åæ­¥è³ Sheets â';btn.disabled=false;},3000);
-  }catch(e){showMsg('â åæ­¥å¤±æï¼'+e.message,'err');btn.textContent='åæ­¥è³ Sheets â';btn.disabled=false;}
+    showMsg('✅ 已成功同步至 Google Sheets！','ok');
+    btn.textContent='已同步 ✓';setTimeout(()=>{btn.textContent='同步至 Sheets ↗';btn.disabled=false;},3000);
+  }catch(e){showMsg('❌ 同步失敗：'+e.message,'err');btn.textContent='同步至 Sheets ↗';btn.disabled=false;}
 }
 function showMsg(t,c){const el=document.getElementById('msg');el.textContent=t;el.className='msg '+c;}
 </script>

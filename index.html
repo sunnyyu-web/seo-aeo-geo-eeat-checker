@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>文章品質審查工具</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F5F4F0;--s:#fff;--s2:#F0EEE9;--bd:#E2DFD8;--tx:#1A1916;--t2:#6B6860;--t3:#9E9B94;--ac:#2A5FE8;--abg:#EEF3FD;--gn:#1A7F5A;--gbg:#E6F5EE;--rd:#C0392B;--r:10px;--rl:16px}
+:root{--bg:#F5F4F0;--s:#fff;--s2:#F0EEE9;--bd:#E2DFD8;--tx:#1A1916;--t2:#6B6860;--t3:#9E9B94;--ac:#2A5FE8;--abg:#EEF3FD;--gn:#1A7F5A;--gbg:#E6F5EE;--rd:#C0392B;--r:10px;--rl:16px;--sh:0 1px 4px rgba(0,0,0,.07)}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6}
-.pg{max-width:700px;margin:0 auto;padding:28px 18px 60px}
-.hdr{display:flex;align-items:center;gap:12px;margin-bottom:22px;padding-bottom:16px;border-bottom:1px solid var(--bd)}
-.logo{width:36px;height:36px;background:var(--ac);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:13px;color:#fff;font-weight:700;flex-shrink:0}
-.hdr h1{font-size:18px;font-weight:700}
+body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh}
+.pg{max-width:700px;margin:0 auto;padding:32px 18px 80px}
+.hdr{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding-bottom:18px;border-bottom:1px solid var(--bd)}
+.logo{width:40px;height:40px;background:var(--ac);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0}
+.hdr h1{font-size:19px;font-weight:700;letter-spacing:-.3px}
 .hdr p{font-size:12px;color:var(--t2);margin-top:2px}
-.card{background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:18px;margin-bottom:12px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:18px;margin-bottom:12px;box-shadow:var(--sh)}
 .lbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px}
 .req{color:var(--rd)}
 .hint{font-weight:400;text-transform:none;letter-spacing:0;font-size:10px;color:var(--t3)}
@@ -30,26 +30,34 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 .chip.on{border-color:var(--ac);background:var(--abg);color:var(--ac);font-weight:500}
 .pip{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
 .chip.on .pip{opacity:1}
-.run{width:100%;padding:13px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;margin-top:4px}
+.how{background:var(--abg);border:1px solid #B8CEF9;border-radius:var(--rl);padding:16px 18px;margin-bottom:14px}
+.how h3{font-size:13px;font-weight:700;color:#1A3A8A;margin-bottom:10px}
+.how ol{padding-left:18px}
+.how li{font-size:13px;color:#1A3A8A;margin-bottom:5px;line-height:1.6}
+.how li strong{font-weight:700}
+.run{width:100%;padding:14px;background:var(--ac);color:#fff;border:none;border-radius:var(--r);font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
 .run:hover{opacity:.88}
-.info{background:var(--abg);border:1px solid #B8CEF9;border-radius:var(--r);padding:14px 16px;font-size:13px;color:#1A3A8A;line-height:1.6;margin-top:14px}
-.info strong{font-weight:700;display:block;margin-bottom:6px}
-.info ol{padding-left:18px}
-.info li{margin-bottom:4px}
-.info code{background:rgba(42,95,232,.12);padding:1px 6px;border-radius:4px;font-family:monospace;font-size:12px}
-.sync-section{margin-top:16px;display:none}
-.sync-section.show{display:block}
-.sync-card{background:var(--gbg);border:1px solid #9FE1CB;border-radius:var(--rl);padding:16px 18px}
+.out-section{display:none;margin-top:14px}
+.out-section.show{display:block}
+.out-card{background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;box-shadow:var(--sh)}
+.out-card h3{font-size:13px;font-weight:700;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.out-ta{width:100%;min-height:160px;padding:11px;border:1px solid var(--bd);border-radius:var(--r);font-size:12px;font-family:'DM Mono',monospace;color:var(--tx);background:var(--s2);resize:vertical;line-height:1.7;outline:none}
+.btn-row{display:flex;gap:8px;margin-top:10px}
+.btn-g{flex:1;padding:10px;background:var(--gn);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.btn-g:hover{opacity:.88}
+.btn-g:disabled{opacity:.4;cursor:not-allowed}
+.btn-w{flex:1;padding:10px;background:var(--s);color:var(--tx);border:1px solid var(--bd);border-radius:var(--r);font-size:13px;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:background .15s;cursor:pointer;font-family:inherit}
+.btn-w:hover{background:var(--s2)}
+.sync-card{background:var(--gbg);border:1px solid #9FE1CB;border-radius:var(--rl);padding:16px 18px;margin-top:12px}
 .sync-card h3{font-size:13px;font-weight:700;color:var(--gn);margin-bottom:10px}
-.br{display:flex;gap:8px;margin-top:8px}
-.bg{flex:1;padding:10px;background:var(--gn);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
-.bg:hover{opacity:.88}
-.bg:disabled{opacity:.4;cursor:not-allowed}
-.bl{flex:1;padding:10px;background:var(--s);color:var(--tx);border:1px solid var(--bd);border-radius:var(--r);font-size:13px;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:background .15s}
-.bl:hover{background:var(--s2)}
+.sync-card ol{padding-left:18px;margin-bottom:12px}
+.sync-card li{font-size:13px;color:#1A5E40;margin-bottom:5px;line-height:1.6}
+.sync-card li code{background:rgba(26,95,64,.12);padding:1px 6px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px}
 .msg{margin-top:8px;font-size:13px;padding:9px 12px;border-radius:var(--r);display:none}
 .msg.ok{display:block;background:var(--gbg);color:var(--gn);border:1px solid #9FE1CB}
 .msg.err{display:block;background:#FEE8E6;color:var(--rd)}
+.sheets-btn{display:inline-flex;align-items:center;gap:6px;margin-top:14px;padding:10px 20px;background:var(--gn);color:#fff;border-radius:var(--r);font-size:13px;font-weight:600;text-decoration:none;transition:opacity .15s}
+.sheets-btn:hover{opacity:.88}
 @media(max-width:500px){.r2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -60,8 +68,17 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   <div class="logo">S4</div>
   <div>
     <h1>文章品質審查工具</h1>
-    <p>SEO · AEO · GEO · EEAT · 結果自動同步 Google Sheets</p>
+    <p>SEO · AEO · GEO · EEAT · 結果同步 Google Sheets</p>
   </div>
+</div>
+
+<div class="how">
+  <h3>📌 使用說明</h3>
+  <ol>
+    <li><strong>填入文章資訊</strong>，點「產生分析請求」</li>
+    <li>複製後貼到你的 <strong>Claude 對話</strong>，取得四維度報告（含 JSON）</li>
+    <li>複製 JSON，貼入下方欄位，點<strong>「同步至 Sheets」</strong>，完成！</li>
+  </ol>
 </div>
 
 <div class="card">
@@ -94,121 +111,101 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
   </div>
 </div>
 
-<button class="run" onclick="analyze()">開始分析 →</button>
+<button class="run" onclick="gen()">產生分析請求 →</button>
 
-<div class="info" id="info" style="display:none">
-  <strong>📋 分析請求已複製！請依照以下步驟：</strong>
-  <ol>
-    <li>開啟 <a href="https://claude.ai" target="_blank" style="color:var(--ac);font-weight:600">claude.ai</a>，貼上（Ctrl+V）並送出</li>
-    <li>Claude 分析完成後，複製回覆中的 <code>{"scores":...}</code> JSON</li>
-    <li>貼入下方欄位，點「同步至 Sheets」即完成</li>
-  </ol>
-</div>
+<div class="out-section" id="outSection">
+  <div class="out-card">
+    <h3>
+      <span>📋 分析請求已產生</span>
+      <span style="font-size:11px;font-weight:400;color:var(--t3)">複製後貼到 Claude</span>
+    </h3>
+    <textarea class="out-ta" id="outTa" readonly></textarea>
+    <div class="btn-row">
+      <button class="btn-g" id="copyBtn" onclick="cp()">複製分析請求</button>
+      <a href="https://claude.ai" target="_blank" class="btn-w">開啟 Claude ↗</a>
+    </div>
+  </div>
 
-<div class="sync-section" id="syncSection">
   <div class="sync-card">
-    <h3>✅ 貼入 Claude 的 JSON 結果，一鍵同步</h3>
-    <textarea id="ji" style="min-height:70px;font-size:12px;font-family:monospace" placeholder='{"scores":{"seo":82,"aeo":75,"geo":70,"eeat":80},"score_overall":77,...}'></textarea>
-    <div class="br">
-      <button class="bg" id="sb" onclick="sync()">同步至 Sheets ↗</button>
-      <a class="bl" href="https://docs.google.com/spreadsheets/d/1SgJnAcFQhU3pNkPv2fIj6KrrgzRdRsSJq58qOIpPkEw" target="_blank">開啟 Sheets 📊</a>
+    <h3>✅ 分析完成後同步至 Sheets</h3>
+    <ol>
+      <li>複製 Claude 回覆中的 <code>{"scores":...}</code> JSON 結果</li>
+      <li>貼入下方欄位，點「同步至 Sheets」即完成</li>
+    </ol>
+    <textarea id="jiTa" style="min-height:80px;font-size:12px;font-family:'DM Mono',monospace" placeholder='{"scores":{"seo":82,"aeo":75,"geo":70,"eeat":80},"score_overall":77,...}'></textarea>
+    <div class="btn-row">
+      <button class="btn-g" id="syncBtn" onclick="sync()">同步至 Sheets ↗</button>
+      <a class="btn-w" href="https://docs.google.com/spreadsheets/d/19JPuIHgnc7IgKsQjz6W6n0CmS0-Je98IhRf4dT15d84/edit" target="_blank">開啟共用 Sheets 📊</a>
     </div>
     <div class="msg" id="msg"></div>
   </div>
+
+  <a href="https://docs.google.com/spreadsheets/d/19JPuIHgnc7IgKsQjz6W6n0CmS0-Je98IhRf4dT15d84/edit" target="_blank" class="sheets-btn">
+    📊 開啟共用 Google Sheets 查看所有審查記錄
+  </a>
 </div>
 
 </div>
 <script>
-const SU='https://script.google.com/macros/s/AKfycbzlzK6RofYI3od-ZXreI_HlAVNxXTYaCM7nJknaG2O4d1aXravjP-4nwOpxeCIMii6W/exec';
+const SU='https://script.google.com/macros/s/AKfycbzmk1-4op5B6wLXX594PW6ZhDapOGDJ6jF1YPQTb0Cl33b_p18iK0e2sV1CAQ7YluY/exec';
 const dims=new Set(['seo','aeo','geo','eeat']);
 const DL={seo:'SEO 搜尋引擎優化',aeo:'AEO 答案引擎優化',geo:'GEO 生成式引擎優化',eeat:'EEAT 可信度'};
-
 function tog(el){const d=el.dataset.d;dims.has(d)?dims.delete(d):dims.add(d);el.classList.toggle('on',dims.has(d));}
 function ce(){document.getElementById('ue').style.display='none';document.getElementById('url').style.borderColor='';}
-
-function analyze(){
+function gen(){
   const url=document.getElementById('url').value.trim();
-  if(!url){
-    document.getElementById('ue').style.display='block';
-    document.getElementById('url').style.borderColor='var(--rd)';
-    document.getElementById('url').focus();
-    return;
-  }
+  if(!url){document.getElementById('ue').style.display='block';document.getElementById('url').style.borderColor='var(--rd)';document.getElementById('url').focus();return;}
   if(!dims.size){alert('請至少勾選一個審查維度');return;}
-
-  const ex=document.getElementById('ex').value.trim();
-  const kw=document.getElementById('kw').value.trim();
-  const rv=document.getElementById('rv').value.trim();
+  const ex=document.getElementById('ex').value.trim(),kw=document.getElementById('kw').value.trim(),rv=document.getElementById('rv').value.trim();
   const ds=[...dims].map(d=>DL[d]).join('、');
+  let p='請幫我審查這篇文章的 '+ds+' 表現：
 
-  const prompt=
-    '請幫我審查這篇文章的 '+ds+' 表現：\n\n'+
-    '文章 URL：'+url+'\n'+
-    (kw?'核心關鍵字：'+kw+'\n':'')+
-    (rv?'負責人：'+rv+'\n':'')+
-    (ex?'\n補充資訊：\n'+ex+'\n':'')+
-    '\n請依各維度提供：\n'+
-    '① 0-100 分\n'+
-    '② 至少 6 項具體檢查結果（✅通過 / ⚠️待改善 / ❌未達標）\n'+
-    '③ 該維度最重要的改善建議（一句話）\n\n'+
-    '最後請輸出以下 JSON（讓我同步到 Google Sheets）：\n'+
-    '{"scores":{"seo":分數,"aeo":分數,"geo":分數,"eeat":分數},"score_overall":加權分數,"details":{"seo":{"tip":"建議"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["優先改善1","優先改善2","優先改善3","優先改善4","優先改善5"]}\n'+
-    '（加權：SEO 30%+AEO 25%+GEO 25%+EEAT 20%）';
+文章 URL：'+url+'
+';
+  if(kw)p+='核心關鍵字：'+kw+'
+';
+  if(rv)p+='負責人：'+rv+'
+';
+  if(ex)p+='
+補充資訊：
+'+ex+'
+';
+  p+='
+請依各維度提供：
+① 0-100 分
+② 至少 6 項具體檢查（✅通過 / ⚠️待改善 / ❌未達標）
+③ 該維度最重要的改善建議（一句話）
 
-  navigator.clipboard.writeText(prompt).then(()=>{
-    document.getElementById('info').style.display='block';
-    document.getElementById('syncSection').classList.add('show');
-    document.querySelector('.run').textContent='✅ 已複製！請開啟 Claude 貼上';
-    document.querySelector('.run').style.background='var(--gn)';
-    setTimeout(()=>{
-      document.getElementById('syncSection').scrollIntoView({behavior:'smooth',block:'start'});
-    },200);
+';
+  p+='最後請輸出以下 JSON（請直接輸出，不要加 markdown）：
+';
+  p+='{"scores":{"seo":分數,"aeo":分數,"geo":分數,"eeat":分數},"score_overall":加權分數,"details":{"seo":{"tip":"建議"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["優先改善1","優先改善2","優先改善3","優先改善4","優先改善5"]}
+';
+  p+='（加權：SEO 30%+AEO 25%+GEO 25%+EEAT 20%）';
+  document.getElementById('outTa').value=p;
+  document.getElementById('outSection').classList.add('show');
+  setTimeout(()=>document.getElementById('outSection').scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+function cp(){
+  navigator.clipboard.writeText(document.getElementById('outTa').value).then(()=>{
+    const b=document.getElementById('copyBtn');b.textContent='已複製 ✓';
+    setTimeout(()=>b.textContent='複製分析請求',2000);
   });
 }
-
 async function sync(){
-  const raw=document.getElementById('ji').value.trim();
-  if(!raw){showMsg('請先貼入 Claude 回覆的 JSON','err');return;}
+  const raw=document.getElementById('jiTa').value.trim();
+  if(!raw){showMsg('請先貼入 Claude 回覆的 JSON 結果','err');return;}
   let d;
   try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');d=JSON.parse(raw.slice(s,e+1));}
   catch{showMsg('JSON 格式錯誤，請確認完整貼入','err');return;}
-
-  const btn=document.getElementById('sb');
-  btn.disabled=true;btn.textContent='同步中...';
-
-  const p={
-    timestamp:new Date().toLocaleString('zh-TW'),
-    keyword:document.getElementById('kw').value||'',
-    reviewer:document.getElementById('rv').value||'',
-    url:document.getElementById('url').value||'',
-    score_seo:d.scores?.seo||0,
-    score_aeo:d.scores?.aeo||0,
-    score_geo:d.scores?.geo||0,
-    score_eeat:d.scores?.eeat||0,
-    score_overall:d.score_overall||0,
-    tip_seo:d.details?.seo?.tip||'',
-    tip_aeo:d.details?.aeo?.tip||'',
-    tip_geo:d.details?.geo?.tip||'',
-    tip_eeat:d.details?.eeat?.tip||'',
-    priority_1:(d.priorities||[])[0]||'',
-    priority_2:(d.priorities||[])[1]||'',
-    priority_3:(d.priorities||[])[2]||'',
-    priority_4:(d.priorities||[])[3]||'',
-    priority_5:(d.priorities||[])[4]||''
-  };
-
+  const btn=document.getElementById('syncBtn');btn.disabled=true;btn.textContent='同步中...';
+  const p={timestamp:new Date().toLocaleString('zh-TW'),keyword:document.getElementById('kw').value||'',reviewer:document.getElementById('rv').value||'',url:document.getElementById('url').value||'',score_seo:d.scores?.seo||0,score_aeo:d.scores?.aeo||0,score_geo:d.scores?.geo||0,score_eeat:d.scores?.eeat||0,score_overall:d.score_overall||0,tip_seo:d.details?.seo?.tip||'',tip_aeo:d.details?.aeo?.tip||'',tip_geo:d.details?.geo?.tip||'',tip_eeat:d.details?.eeat?.tip||'',priority_1:(d.priorities||[])[0]||'',priority_2:(d.priorities||[])[1]||'',priority_3:(d.priorities||[])[2]||'',priority_4:(d.priorities||[])[3]||'',priority_5:(d.priorities||[])[4]||''};
   try{
     await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
     showMsg('✅ 已成功同步至 Google Sheets！','ok');
-    btn.textContent='已同步 ✓';
-    setTimeout(()=>{btn.textContent='同步至 Sheets ↗';btn.disabled=false;},3000);
-  }catch(e){
-    showMsg('❌ 同步失敗：'+e.message,'err');
-    btn.textContent='同步至 Sheets ↗';
-    btn.disabled=false;
-  }
+    btn.textContent='已同步 ✓';setTimeout(()=>{btn.textContent='同步至 Sheets ↗';btn.disabled=false;},3000);
+  }catch(e){showMsg('❌ 同步失敗：'+e.message,'err');btn.textContent='同步至 Sheets ↗';btn.disabled=false;}
 }
-
 function showMsg(t,c){const el=document.getElementById('msg');el.textContent=t;el.className='msg '+c;}
 </script>
 </body>

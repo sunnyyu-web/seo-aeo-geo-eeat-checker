@@ -3,962 +3,179 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SEO / AEO / GEO / EEAT 文章審查工具</title>
+<title>æç« åè³ªå¯©æ¥å·¥å· Â· SEO / AEO / GEO / EEAT</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F5F4F0;
-    --surface: #FFFFFF;
-    --surface2: #F0EEE9;
-    --border: #E2DFD8;
-    --text: #1A1916;
-    --text2: #6B6860;
-    --text3: #9E9B94;
-    --accent: #2A5FE8;
-    --accent-bg: #EEF3FD;
-    --green: #1A7F5A;
-    --green-bg: #E6F5EE;
-    --amber: #B45309;
-    --amber-bg: #FEF3C7;
-    --red: #C0392B;
-    --red-bg: #FEE8E6;
-    --radius: 10px;
-    --radius-lg: 16px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
-
-  .page {
-    max-width: 820px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
-  }
-
-  /* Header */
-  .header {
-    margin-bottom: 28px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .header-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 6px;
-  }
-  .logo-mark {
-    width: 36px;
-    height: 36px;
-    background: var(--accent);
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: white;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    flex-shrink: 0;
-  }
-  .header h1 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text);
-    letter-spacing: -0.3px;
-  }
-  .header p {
-    font-size: 13px;
-    color: var(--text2);
-    margin-left: 48px;
-  }
-
-  /* Config banner */
-  .config-banner {
-    background: var(--amber-bg);
-    border: 1px solid #FDE68A;
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    font-size: 13px;
-    color: var(--amber);
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .config-banner.hidden { display: none; }
-  .config-banner b { font-weight: 700; }
-
-  /* Config panel */
-  .config-panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow);
-  }
-  .config-panel h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .config-row {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-bottom: 12px;
-  }
-  .config-row label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .config-row input {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    font-family: 'DM Mono', monospace;
-    color: var(--text);
-    background: var(--surface2);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .config-row input:focus { border-color: var(--accent); }
-  .config-row input::placeholder { color: var(--text3); }
-  .save-config-btn {
-    padding: 8px 20px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: 'Noto Sans TC', sans-serif;
-    transition: opacity 0.15s;
-  }
-  .save-config-btn:hover { opacity: 0.88; }
-
-  /* Input section */
-  .input-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
-  }
-  .field-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text2);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 6px;
-    display: block;
-  }
-  .url-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .url-row input {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 14px;
-    color: var(--text);
-    background: var(--surface2);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .url-row input:focus { border-color: var(--accent); }
-  .url-row input::placeholder { color: var(--text3); }
-  .fetch-btn {
-    padding: 10px 16px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    color: var(--text);
-    cursor: pointer;
-    white-space: nowrap;
-    font-family: 'Noto Sans TC', sans-serif;
-    transition: background 0.15s;
-  }
-  .fetch-btn:hover { background: var(--border); }
-
-  .divider-or {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin: 14px 0;
-    font-size: 12px;
-    color: var(--text3);
-  }
-  .divider-or::before, .divider-or::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    color: var(--text);
-    background: var(--surface2);
-    resize: vertical;
-    min-height: 110px;
-    outline: none;
-    font-family: 'Noto Sans TC', sans-serif;
-    line-height: 1.6;
-    transition: border-color 0.15s;
-  }
-  textarea:focus { border-color: var(--accent); }
-  textarea::placeholder { color: var(--text3); }
-
-  /* Meta fields */
-  .meta-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 14px;
-  }
-  .meta-field { display: flex; flex-direction: column; gap: 4px; }
-  .meta-field input {
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    color: var(--text);
-    background: var(--surface2);
-    outline: none;
-    transition: border-color 0.15s;
-  }
-  .meta-field input:focus { border-color: var(--accent); }
-  .meta-field input::placeholder { color: var(--text3); }
-
-  /* Dims */
-  .dims-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 16px;
-  }
-  .dim-chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border: 1px solid var(--border);
-    border-radius: 99px;
-    font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-    color: var(--text2);
-    background: var(--surface);
-    transition: all 0.15s;
-  }
-  .dim-chip.on {
-    border-color: var(--accent);
-    background: var(--accent-bg);
-    color: var(--accent);
-    font-weight: 500;
-  }
-  .dim-chip .pip {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: currentColor;
-    opacity: 0.6;
-  }
-  .dim-chip.on .pip { opacity: 1; }
-
-  /* Run button */
-  .run-btn {
-    width: 100%;
-    padding: 13px;
-    background: var(--text);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: 'Noto Sans TC', sans-serif;
-    letter-spacing: 0.3px;
-    transition: opacity 0.15s;
-  }
-  .run-btn:hover { opacity: 0.85; }
-  .run-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-  /* Status */
-  .status {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--text2);
-  }
-  .status.show { display: flex; }
-  .spin {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.75s linear infinite;
-    flex-shrink: 0;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Report */
-  .report { display: none; margin-top: 28px; }
-  .report.show { display: block; }
-
-  .report-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-  .report-meta { font-size: 13px; color: var(--text2); }
-  .report-meta strong { color: var(--text); font-weight: 700; }
-  .action-btns { display: flex; gap: 8px; }
-  .action-btn {
-    padding: 7px 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    font-size: 13px;
-    color: var(--text);
-    background: var(--surface);
-    cursor: pointer;
-    font-family: 'Noto Sans TC', sans-serif;
-    transition: background 0.15s;
-  }
-  .action-btn:hover { background: var(--surface2); }
-  .action-btn.primary {
-    background: var(--green);
-    color: white;
-    border-color: var(--green);
-  }
-  .action-btn.primary:hover { opacity: 0.88; }
-  .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* Score grid */
-  .score-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 12px;
-  }
-  .score-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px 12px 14px;
-    text-align: center;
-    box-shadow: var(--shadow);
-  }
-  .score-card .dim-name {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text3);
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    margin-bottom: 6px;
-    font-family: 'DM Mono', monospace;
-  }
-  .score-card .score-num {
-    font-size: 32px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-  .score-card .score-bar {
-    height: 3px;
-    background: var(--border);
-    border-radius: 99px;
-  }
-  .score-card .score-fill {
-    height: 100%;
-    border-radius: 99px;
-    transition: width 0.8s ease;
-  }
-
-  .overall-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: var(--shadow);
-  }
-  .overall-left .label { font-size: 12px; color: var(--text2); margin-bottom: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
-  .overall-left .big {
-    font-size: 38px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    line-height: 1;
-  }
-  .grade-badge {
-    padding: 6px 16px;
-    border-radius: 99px;
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  /* Detail sections */
-  .detail-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-  }
-  .detail-section h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .score-pill {
-    padding: 2px 10px;
-    border-radius: 99px;
-    font-size: 12px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-  }
-  .items-list { display: flex; flex-direction: column; gap: 7px; }
-  .check-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: 13px;
-    line-height: 1.5;
-    color: var(--text);
-  }
-  .check-item .ico { flex-shrink: 0; font-size: 14px; margin-top: 0px; }
-  .tip-box {
-    margin-top: 14px;
-    padding: 10px 14px;
-    background: var(--accent-bg);
-    border-left: 3px solid var(--accent);
-    border-radius: 0 var(--radius) var(--radius) 0;
-    font-size: 12px;
-    color: #1A3A8A;
-    line-height: 1.5;
-  }
-
-  /* Priority section */
-  .prio-section {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 18px 20px;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow);
-    display: none;
-  }
-  .prio-section.show { display: block; }
-  .prio-section h3 {
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 14px;
-  }
-  .prio-list { display: flex; flex-direction: column; gap: 8px; }
-  .prio-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    padding: 10px 14px;
-    background: var(--surface2);
-    border-radius: var(--radius);
-    font-size: 13px;
-    line-height: 1.5;
-  }
-  .prio-num {
-    min-width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 11px;
-    font-weight: 700;
-    font-family: 'DM Mono', monospace;
-    flex-shrink: 0;
-  }
-
-  /* Sync result */
-  .sync-result {
-    display: none;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    border-radius: var(--radius);
-    margin-top: 12px;
-    font-size: 13px;
-  }
-  .sync-result.ok { display: flex; background: var(--green-bg); color: var(--green); }
-  .sync-result.err { display: flex; background: var(--red-bg); color: var(--red); }
-
-  @media (max-width: 600px) {
-    .score-grid { grid-template-columns: repeat(2, 1fr); }
-    .meta-row { grid-template-columns: 1fr; }
-  }
+:root{--bg:#F5F4F0;--s:#fff;--s2:#F0EEE9;--bd:#E2DFD8;--tx:#1A1916;--t2:#6B6860;--t3:#9E9B94;--ac:#2A5FE8;--abg:#EEF3FD;--gn:#1A7F5A;--gbg:#E6F5EE;--rd:#C0392B;--r:10px;--rl:16px;--sh:0 1px 3px rgba(0,0,0,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Noto Sans TC',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:15px;line-height:1.6;min-height:100vh}
+.pg{max-width:740px;margin:0 auto;padding:28px 18px 60px}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--bd)}
+.logo{width:34px;height:34px;background:var(--ac);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700;font-family:'DM Mono',monospace;flex-shrink:0}
+.hdr h1{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.hdr p{font-size:11px;color:var(--t2);margin-top:2px}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.step{background:var(--s);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;display:flex;gap:8px;box-shadow:var(--sh)}
+.sn{width:22px;height:22px;border-radius:50%;background:var(--ac);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:1px}
+.st strong{font-size:12px;font-weight:700;display:block;margin-bottom:1px}
+.st span{font-size:11px;color:var(--t2)}
+.card{background:var(--s);border:1px solid var(--bd);border-radius:var(--rl);padding:16px 18px;margin-bottom:10px;box-shadow:var(--sh)}
+.lbl{font-size:10px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:5px}
+.req{color:var(--rd)}
+.hint{font-weight:400;color:var(--t3);text-transform:none;letter-spacing:0;font-size:10px}
+input[type=text],textarea{width:100%;padding:9px 11px;border:1px solid var(--bd);border-radius:var(--r);font-size:13px;font-family:inherit;color:var(--tx);background:var(--s2);outline:none;transition:border-color .15s}
+input:focus,textarea:focus{border-color:var(--ac);background:var(--s)}
+input::placeholder,textarea::placeholder{color:var(--t3)}
+textarea{resize:vertical;min-height:80px;line-height:1.6}
+.ue{display:none;font-size:11px;color:var(--rd);margin-top:4px}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.mf{display:flex;flex-direction:column;gap:4px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{display:flex;align-items:center;gap:5px;padding:5px 13px;border-radius:99px;border:1px solid var(--bd);background:var(--s);cursor:pointer;font-size:13px;color:var(--t2);user-select:none;transition:all .15s}
+.chip.on{border-color:var(--ac);background:var(--abg);color:var(--ac);font-weight:500}
+.pip{width:5px;height:5px;border-radius:50%;background:currentColor;opacity:.5}
+.chip.on .pip{opacity:1}
+.run{width:100%;padding:12px;background:var(--tx);color:#fff;border:none;border-radius:var(--r);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.run:hover{opacity:.85}
+.ph2{display:none;margin-top:10px}
+.ph2.show{display:block}
+.sc{background:var(--gbg);border:1px solid #9FE1CB;border-radius:var(--rl);padding:16px 18px;margin-top:10px}
+.sc h3{font-size:13px;font-weight:700;color:var(--gn);margin-bottom:8px}
+.sc ol{padding-left:18px;margin-bottom:12px}
+.sc li{font-size:13px;color:#1A5E40;margin-bottom:4px;line-height:1.6}
+.sc li code{background:rgba(26,95,64,.12);padding:1px 5px;border-radius:4px;font-family:'DM Mono',monospace;font-size:12px}
+.br{display:flex;gap:8px;margin-top:8px}
+.bg{flex:1;padding:9px;background:var(--gn);color:#fff;border:none;border-radius:var(--r);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.bg:hover{opacity:.88}
+.bg:disabled{opacity:.4;cursor:not-allowed}
+.bs{flex:1;padding:9px;background:var(--s);color:var(--tx);border:1px solid var(--bd);border-radius:var(--r);font-size:13px;cursor:pointer;font-family:inherit;text-decoration:none;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.bs:hover{background:var(--s2)}
+.msg{margin-top:8px;font-size:13px;padding:9px 12px;border-radius:var(--r);display:none}
+.msg.ok{display:block;background:var(--gbg);color:var(--gn);border:1px solid #9FE1CB}
+.msg.err{display:block;background:#FEE8E6;color:var(--rd);border:1px solid #FECACA}
+@media(max-width:520px){.steps{grid-template-columns:1fr 1fr}.r2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
-<div class="page">
+<div class="pg">
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-top">
-      <div class="logo-mark">S4</div>
-      <h1>文章品質審查工具</h1>
-    </div>
-    <p>SEO · AEO · GEO · EEAT 四維度分析，結果自動同步至 Google Sheets</p>
+<div class="hdr">
+  <div class="logo">S4</div>
+  <div>
+    <h1>æç« åè³ªå¯©æ¥å·¥å·</h1>
+    <p>SEO Â· AEO Â· GEO Â· EEAT åç¶­åº¦åæ Â· çµæåæ­¥ Google Sheets</p>
   </div>
-
-  <!-- Config warning -->
-  <div class="config-banner" id="configBanner">
-    <span>⚙️</span>
-    <span><b>尚未設定</b>：請展開下方設定欄位，填入 Google Sheets Web App URL 後儲存，才能同步審查結果。</span>
-  </div>
-
-  <!-- Config panel -->
-  <div class="config-panel">
-    <h3>⚙️ 連接設定
-      <span style="font-size:12px;font-weight:400;color:var(--text3);cursor:pointer" onclick="toggleConfig()">
-        <span id="toggleLabel">▼ 展開</span>
-      </span>
-    </h3>
-    <div id="configFields" style="display:none">
-      <div class="config-row">
-        <label>Google Sheets Web App URL</label>
-        <input type="text" id="sheetUrl" placeholder="https://script.google.com/macros/s/XXXXXX/exec" />
-      </div>
-      <div class="config-row">
-        <label>Anthropic API Key</label>
-        <input type="password" id="apiKey" placeholder="sk-ant-..." />
-      </div>
-      <div style="font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.6">
-        API Key 僅儲存於此瀏覽器的 localStorage，不會傳送至任何第三方。
-      </div>
-      <button class="save-config-btn" onclick="saveConfig()">儲存設定</button>
-    </div>
-  </div>
-
-  <!-- Input -->
-  <div class="input-card">
-    <span class="field-label">文章 URL <span style="color:var(--red);font-weight:700">*</span> <span style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0">（必填）</span></span>
-    <div style="margin-bottom:16px">
-      <input type="text" id="urlInput" style="width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;color:var(--text);background:var(--surface2);outline:none;transition:border-color 0.15s;font-family:'Noto Sans TC',sans-serif" placeholder="https://yoursite.com/article-slug" oninput="clearUrlError()" />
-      <div id="urlError" style="display:none;font-size:12px;color:var(--red);margin-top:5px">⚠ 請填入文章 URL 才能進行審查</div>
-    </div>
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <span class="field-label" style="margin-bottom:0">補充內容 <span style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0">（選填｜可貼入 Meta Description、H2 結構等輔助資訊，提升分析精準度）</span></span>
-    </div>
-    <textarea id="textInput" placeholder="選填：貼入 Meta Description、H2 標題列表、或其他想補充給 AI 的文章資訊..."></textarea>
-
-    <div class="meta-row">
-      <div class="meta-field">
-        <span class="field-label">核心關鍵字 <span style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0">（供表單記錄，文章唯一識別）</span></span>
-        <input type="text" id="articleTitle" placeholder="例：台中螢火蟲" />
-      </div>
-      <div class="meta-field">
-        <span class="field-label">負責人 <span style="font-weight:400;color:var(--text3);text-transform:none;letter-spacing:0">（供表單記錄）</span></span>
-        <input type="text" id="reviewer" placeholder="例：小明" />
-      </div>
-    </div>
-  </div>
-
-  <!-- Dims -->
-  <div style="margin-bottom:16px">
-    <span class="field-label" style="margin-bottom:8px">審查維度</span>
-    <div class="dims-row">
-      <div class="dim-chip on" data-d="seo" onclick="toggleDim(this)"><span class="pip"></span>SEO</div>
-      <div class="dim-chip on" data-d="aeo" onclick="toggleDim(this)"><span class="pip"></span>AEO</div>
-      <div class="dim-chip on" data-d="geo" onclick="toggleDim(this)"><span class="pip"></span>GEO</div>
-      <div class="dim-chip on" data-d="eeat" onclick="toggleDim(this)"><span class="pip"></span>EEAT</div>
-    </div>
-  </div>
-
-  <button class="run-btn" id="runBtn" onclick="runAudit()">開始分析文章</button>
-
-  <div class="status" id="statusEl">
-    <div class="spin"></div>
-    <span id="statusText">正在連接分析引擎...</span>
-  </div>
-
-  <!-- Report -->
-  <div class="report" id="reportEl">
-    <div class="report-header">
-      <div class="report-meta">
-        審查完成 · <strong id="rptTitle"></strong> · <span id="rptTime"></span>
-      </div>
-      <div class="action-btns">
-        <button class="action-btn" onclick="copyReport()">複製報告</button>
-        <button class="action-btn primary" id="syncBtn" onclick="syncToSheet()">同步至 Sheets ↗</button>
-      </div>
-    </div>
-
-    <div class="score-grid" id="scoreGrid"></div>
-    <div class="overall-card" id="overallCard"></div>
-    <div id="detailSections"></div>
-    <div class="prio-section" id="prioSection">
-      <h3>🎯 優先改善項目 Top 5</h3>
-      <div class="prio-list" id="prioList"></div>
-    </div>
-
-    <div class="sync-result" id="syncResult"></div>
-  </div>
-
 </div>
 
-<script>
-// ─── State ───────────────────────────────────────────────
-let activeDims = new Set(['seo','aeo','geo','eeat']);
-let lastData = null;
-let configOpen = false;
+<div class="steps">
+  <div class="step"><div class="sn">1</div><div class="st"><strong>å¡«å¥è³è¨</strong><span>URLãééµå­</span></div></div>
+  <div class="step"><div class="sn">2</div><div class="st"><strong>è¤è£½è«æ±</strong><span>ç¢çæç¤ºè©</span></div></div>
+  <div class="step"><div class="sn">3</div><div class="st"><strong>è²¼å° Claude</strong><span>åå¾å ±å</span></div></div>
+  <div class="step"><div class="sn">4</div><div class="st"><strong>åæ­¥ Sheets</strong><span>èªåå¯«å¥è¡¨å®</span></div></div>
+</div>
 
-// ─── Config ──────────────────────────────────────────────
-function loadConfig() {
-  const url = localStorage.getItem('seo_sheet_url') || '';
-  const key = localStorage.getItem('seo_api_key') || '';
-  document.getElementById('sheetUrl').value = url;
-  document.getElementById('apiKey').value = key;
-  document.getElementById('configBanner').classList.toggle('hidden', !!url && !!key);
-}
-
-function saveConfig() {
-  const url = document.getElementById('sheetUrl').value.trim();
-  const key = document.getElementById('apiKey').value.trim();
-  localStorage.setItem('seo_sheet_url', url);
-  localStorage.setItem('seo_api_key', key);
-  document.getElementById('configBanner').classList.toggle('hidden', !!url && !!key);
-  alert('設定已儲存！');
-}
-
-function toggleConfig() {
-  configOpen = !configOpen;
-  document.getElementById('configFields').style.display = configOpen ? 'block' : 'none';
-  document.getElementById('toggleLabel').textContent = configOpen ? '▲ 收起' : '▼ 展開';
-}
-
-// ─── Dims ─────────────────────────────────────────────────
-function toggleDim(el) {
-  const d = el.dataset.d;
-  activeDims.has(d) ? activeDims.delete(d) : activeDims.add(d);
-  el.classList.toggle('on', activeDims.has(d));
-}
-
-// ─── Helpers ──────────────────────────────────────────────
-function scoreColor(s) {
-  if (s >= 80) return '#1A7F5A';
-  if (s >= 65) return '#B45309';
-  return '#C0392B';
-}
-function scoreBg(s) {
-  if (s >= 80) return '#E6F5EE';
-  if (s >= 65) return '#FEF3C7';
-  return '#FEE8E6';
-}
-function gradeInfo(s) {
-  if (s >= 90) return { label: '優秀', bg: '#E6F5EE', color: '#1A7F5A' };
-  if (s >= 75) return { label: '良好', bg: '#D1FAE5', color: '#065F46' };
-  if (s >= 60) return { label: '普通', bg: '#FEF3C7', color: '#B45309' };
-  return { label: '需改善', bg: '#FEE8E6', color: '#C0392B' };
-}
-function now() {
-  return new Date().toLocaleString('zh-TW', { month:'numeric', day:'numeric', hour:'2-digit', minute:'2-digit' });
-}
-function setStatus(show, txt) {
-  const el = document.getElementById('statusEl');
-  el.classList.toggle('show', show);
-  if (txt) document.getElementById('statusText').textContent = txt;
-}
-
-// ─── Render ───────────────────────────────────────────────
-function renderReport(data) {
-  const dimNames = { seo: 'SEO', aeo: 'AEO', geo: 'GEO', eeat: 'EEAT' };
-  const dimFull = { seo: '搜尋引擎優化', aeo: '答案引擎優化', geo: '生成式引擎優化', eeat: 'EEAT 可信度' };
-
-  // Scores
-  const grid = document.getElementById('scoreGrid');
-  grid.innerHTML = '';
-  ['seo','aeo','geo','eeat'].forEach(k => {
-    if (!activeDims.has(k)) return;
-    const s = data.scores[k] || 0;
-    const c = scoreColor(s);
-    grid.innerHTML += `
-      <div class="score-card">
-        <div class="dim-name">${dimNames[k]}</div>
-        <div class="score-num" style="color:${c}">${s}</div>
-        <div class="score-bar"><div class="score-fill" style="width:${s}%;background:${c}"></div></div>
-      </div>`;
-  });
-
-  // Overall
-  const weights = { seo: 0.30, aeo: 0.25, geo: 0.25, eeat: 0.20 };
-  let overall = 0, totalW = 0;
-  ['seo','aeo','geo','eeat'].forEach(k => {
-    if (activeDims.has(k)) { overall += (data.scores[k]||0) * weights[k]; totalW += weights[k]; }
-  });
-  overall = totalW > 0 ? Math.round(overall / totalW) : 0;
-  const g = gradeInfo(overall);
-  document.getElementById('overallCard').innerHTML = `
-    <div class="overall-left">
-      <div class="label">綜合評分</div>
-      <div class="big" style="color:${scoreColor(overall)}">${overall}<span style="font-size:18px;font-weight:400;color:var(--text3)"> / 100</span></div>
+<div class="card">
+  <span class="lbl">æç«  URL <span class="req">*</span> <span class="hint">ï¼å¿å¡«ï¼</span></span>
+  <div style="margin-bottom:12px">
+    <input type="text" id="url" placeholder="https://yoursite.com/article-slug" oninput="ce()">
+    <div class="ue" id="ue">â  è«å¡«å¥æç«  URL æè½é²è¡å¯©æ¥</div>
+  </div>
+  <span class="lbl" style="margin-bottom:4px">è£åå§å®¹ <span class="hint">ï¼é¸å¡«ï½Meta DescriptionãH2 çµæ§ç­ï¼</span></span>
+  <textarea id="ex" placeholder="é¸å¡«ï¼è²¼å¥ Meta DescriptionãH2 æ¨é¡åè¡¨..."></textarea>
+  <div class="r2">
+    <div class="mf">
+      <span class="lbl">æ ¸å¿ééµå­ <span class="hint">ï¼ä¾ Sheets è¨éï¼</span></span>
+      <input type="text" id="kw" placeholder="ä¾ï¼å°ä¸­è¢ç«è²">
     </div>
-    <div class="grade-badge" style="background:${g.bg};color:${g.color}">${g.label}</div>`;
+    <div class="mf">
+      <span class="lbl">è² è²¬äºº <span class="hint">ï¼ä¾ Sheets è¨éï¼</span></span>
+      <input type="text" id="rv" placeholder="ä¾ï¼å°æ">
+    </div>
+  </div>
+</div>
 
-  // Details
-  const container = document.getElementById('detailSections');
-  container.innerHTML = '';
-  Object.entries(data.details || {}).forEach(([dim, info]) => {
-    if (!activeDims.has(dim)) return;
-    const s = data.scores[dim] || 0;
-    const c = scoreColor(s);
-    let itemsHtml = (info.items || []).map(it => {
-      const ico = it.status === 'pass' ? '✅' : it.status === 'warn' ? '⚠️' : '❌';
-      return `<div class="check-item"><span class="ico">${ico}</span><span>${it.text}</span></div>`;
-    }).join('');
-    container.innerHTML += `
-      <div class="detail-section">
-        <h3>${dimNames[dim]} <span style="font-size:12px;font-weight:400;color:var(--text2)">${dimFull[dim]}</span>
-          <span class="score-pill" style="background:${scoreBg(s)};color:${c}">${s} 分</span>
-        </h3>
-        <div class="items-list">${itemsHtml}</div>
-        ${info.tip ? `<div class="tip-box">💡 ${info.tip}</div>` : ''}
-      </div>`;
-  });
+<div class="card" style="margin-bottom:12px">
+  <span class="lbl" style="margin-bottom:8px">å¯©æ¥ç¶­åº¦</span>
+  <div class="chips">
+    <div class="chip on" data-d="seo" onclick="tog(this)"><span class="pip"></span>SEO æå°å¼æ</div>
+    <div class="chip on" data-d="aeo" onclick="tog(this)"><span class="pip"></span>AEO ç­æ¡å¼æ</div>
+    <div class="chip on" data-d="geo" onclick="tog(this)"><span class="pip"></span>GEO çæå¼å¼æ</div>
+    <div class="chip on" data-d="eeat" onclick="tog(this)"><span class="pip"></span>EEAT å¯ä¿¡åº¦</div>
+  </div>
+</div>
 
-  // Priority
-  if (data.priorities && data.priorities.length) {
-    const ps = document.getElementById('prioSection');
-    ps.classList.add('show');
-    document.getElementById('prioList').innerHTML = data.priorities.map((p, i) =>
-      `<div class="prio-item"><div class="prio-num">${i+1}</div><div>${p}</div></div>`
-    ).join('');
-  }
+<button class="run" onclick="gen()">ç¢çåæè«æ± â</button>
 
-  // Header meta
-  const title = document.getElementById('articleTitle').value || '（未填核心關鍵字）';
-  document.getElementById('rptTitle').textContent = title;
-  document.getElementById('rptTime').textContent = now();
+<div class="ph2" id="ph2">
+  <div class="card">
+    <span class="lbl" style="margin-bottom:6px">ð åæè«æ±ï¼è¤è£½å¾è²¼å° Claudeï¼</span>
+    <textarea id="out" readonly style="min-height:150px;font-size:12px;font-family:'DM Mono',monospace"></textarea>
+    <div class="br">
+      <button class="bg" id="cb" onclick="cp()">è¤è£½åæè«æ±</button>
+      <a href="https://claude.ai" target="_blank" class="bs">éå Claude â</a>
+    </div>
+  </div>
 
-  // Store for sync
-  data._overall = overall;
-  data._time = new Date().toISOString();
-  lastData = data;
+  <div class="sc">
+    <h3>â Claude åæå®æå¾ â åæ­¥çµæ</h3>
+    <ol>
+      <li>è¤è£½ Claude åè¦ä¸­ç <code>{"scores":...}</code> JSON</li>
+      <li>è²¼å¥ä¸æ¹æ¬ä½ï¼é»ãåæ­¥è³ Sheetsã</li>
+    </ol>
+    <span class="lbl" style="margin-bottom:5px">è²¼å¥ Claude åè¦ç JSON</span>
+    <textarea id="ji" style="min-height:80px;font-size:12px;font-family:'DM Mono',monospace" placeholder='{"scores":{"seo":82,"aeo":75,"geo":70,"eeat":80},"score_overall":77,...}'></textarea>
+    <div class="br">
+      <button class="bg" id="sb" onclick="sync()">åæ­¥è³ Sheets â</button>
+      <a class="bs" href="https://docs.google.com/spreadsheets/d/1SgJnAcFQhU3pNkPv2fIj6KrrgzRdRsSJq58qOIpPkEw" target="_blank">éå Sheets ð</a>
+    </div>
+    <div class="msg" id="msg"></div>
+  </div>
+</div>
 
-  document.getElementById('reportEl').classList.add('show');
+</div>
+<script>
+const SU='https://script.google.com/macros/s/AKfycbzlzK6RofYI3od-ZXreI_HlAVNxXTYaCM7nJknaG2O4d1aXravjP-4nwOpxeCIMii6W/exec';
+const dims=new Set(['seo','aeo','geo','eeat']);
+const DL={seo:'SEO æå°å¼æåªå',aeo:'AEO ç­æ¡å¼æåªå',geo:'GEO çæå¼å¼æåªå',eeat:'EEAT å¯ä¿¡åº¦'};
+function tog(el){const d=el.dataset.d;dims.has(d)?dims.delete(d):dims.add(d);el.classList.toggle('on',dims.has(d));}
+function ce(){document.getElementById('ue').style.display='none';document.getElementById('url').style.borderColor='';}
+function gen(){
+  const url=document.getElementById('url').value.trim();
+  if(!url){document.getElementById('ue').style.display='block';document.getElementById('url').style.borderColor='var(--rd)';document.getElementById('url').focus();return;}
+  if(!dims.size){alert('è«è³å°å¾é¸ä¸åå¯©æ¥ç¶­åº¦');return;}
+  const ex=document.getElementById('ex').value.trim(),kw=document.getElementById('kw').value.trim(),rv=document.getElementById('rv').value.trim();
+  const ds=[...dims].map(d=>DL[d]).join('ã');
+  let p=`è«å¹«æå¯©æ¥éç¯æç« ç ${ds} è¡¨ç¾ï¼\n\næç«  URLï¼${url}\n`;
+  if(kw)p+=`æ ¸å¿ééµå­ï¼${kw}\n`;
+  if(rv)p+=`è² è²¬äººï¼${rv}\n`;
+  if(ex)p+=`\nè£åè³è¨ï¼\n${ex}\n`;
+  p+=`\nè«ä¾åç¶­åº¦æä¾ï¼â  0-100 å â¡ è³å° 6 é å·é«æª¢æ¥ï¼âz`é/â ï¸å¾æ¹å/âæªéæ¨ï¼â¢ æ¹åå»ºè­°ä¸å¥è©±\n`;
+  p+=`\næå¾è¼¸åº JSONï¼\n{"scores":{"seo":åæ¸,"aeo":åæ¸,"geo":åæ¸,"eeat":åæ¸},"score_overall":å æ¬åæ¸,"details":{"seo":{"tip":"å»ºè­°"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["åªåæ¹å1","åªåæ¹å2","åªåæ¹å3","åªåæ¹å4","åªåæ¹å5"]}\nå æ¬ï¼SEO 30%+AEO 25%+GEO 25%+EEAT 20%`;
+  document.getElementById('out').value=p;
+  document.getElementById('ph2').classList.add('show');
+  setTimeout(()=>document.getElementById('ph2').scrollIntoView({behavior:'smooth',block:'start'}),100);
 }
-
-// ─── URL error helper ─────────────────────────────────────
-function clearUrlError() {
-  const el = document.getElementById('urlError');
-  if (el) el.style.display = 'none';
-  const inp = document.getElementById('urlInput');
-  if (inp) inp.style.borderColor = '';
-}
-
-// ─── Run audit ────────────────────────────────────────────
-async function runAudit() {
-  const content = document.getElementById('textInput').value.trim();
-  const url = document.getElementById('urlInput').value.trim();
-
-  // URL 必填驗證
-  if (!url) {
-    const errEl = document.getElementById('urlError');
-    const inp = document.getElementById('urlInput');
-    if (errEl) errEl.style.display = 'block';
-    if (inp) { inp.style.borderColor = 'var(--red)'; inp.focus(); }
-    return;
-  }
-  if (activeDims.size === 0) { alert('請至少勾選一個審查維度'); return; }
-
-  const apiKey = localStorage.getItem('seo_api_key') || '';
-  if (!apiKey) { alert('請先在設定欄位填入 Anthropic API Key'); toggleConfig(); return; }
-
-  const btn = document.getElementById('runBtn');
-  btn.disabled = true;
-  setStatus(true, '正在連接分析引擎...');
-  document.getElementById('reportEl').classList.remove('show');
-  document.getElementById('syncResult').className = 'sync-result';
-
-  const dims = [...activeDims].join('、');
-  // URL 為主要分析對象；補充內容為輔助資訊
-  const inputText = `文章 URL：${url}` + (content ? `\n\n補充資訊（Meta Description / H2 結構等）：\n${content}` : '');
-  const statuses = ['解析文章結構中...','評估 SEO 技術要素...','分析 AEO 答案結構...','計算 GEO 可引用性...','驗證 EEAT 可信度...','生成審查報告...'];
-  let si = 0;
-  const ticker = setInterval(() => setStatus(true, statuses[Math.min(si++, statuses.length-1)]), 1800);
-
-  const prompt = `你是資深 SEO/AEO/GEO/EEAT 顧問。審查以下文章，只評估這些維度：${dims}。
-
-文章：
----
-${inputText.slice(0, 3500)}
----
-
-嚴格只回傳 JSON，不加任何說明或 markdown：
-
-{
-  "scores": {"seo":0-100,"aeo":0-100,"geo":0-100,"eeat":0-100},
-  "details": {
-    "seo": {"items":[{"status":"pass|warn|fail","text":"說明15字內"}...],"tip":"改善建議30字內"},
-    "aeo": {"items":[...],"tip":"..."},
-    "geo": {"items":[...],"tip":"..."},
-    "eeat": {"items":[...],"tip":"..."}
-  },
-  "priorities": ["具體可執行的優先改善項目，30字內","...","...","...","..."]
-}
-
-各維度至少6個檢查項目。priorities 給5個，按重要性排序。`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-client-side-api-key-flag': 'true' },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 1500, messages: [{ role: 'user', content: prompt }] })
-    });
-    clearInterval(ticker);
-    const d = await res.json();
-    const raw = (d.content || []).map(b => b.text || '').join('');
-    let parsed;
-    try { parsed = JSON.parse(raw.replace(/```json|```/g, '').trim()); }
-    catch(e) { throw new Error('JSON 解析失敗：' + raw.slice(0, 200)); }
-    setStatus(false);
-    renderReport(parsed);
-  } catch(err) {
-    clearInterval(ticker);
-    setStatus(false);
-    alert('分析失敗：' + err.message);
-  }
-  btn.disabled = false;
-}
-
-// ─── Copy ─────────────────────────────────────────────────
-function copyReport() {
-  if (!lastData) return;
-  const keyword = document.getElementById('articleTitle').value || '（未填核心關鍵字）';
-  const reviewer = document.getElementById('reviewer').value || '';
-  const url = document.getElementById('urlInput').value || '';
-  let txt = `【文章審查報告】核心關鍵字：${keyword}\n`;
-  txt += `審查時間：${new Date().toLocaleString('zh-TW')}\n`;
-  if (reviewer) txt += `審查人員：${reviewer}\n`;
-  if (url) txt += `URL：${url}\n`;
-  txt += `\n📊 分數摘要\n`;
-  txt += `SEO：${lastData.scores.seo} / AEO：${lastData.scores.aeo} / GEO：${lastData.scores.geo} / EEAT：${lastData.scores.eeat}\n`;
-  txt += `綜合：${lastData._overall}\n\n`;
-  txt += `🎯 優先改善項目\n`;
-  (lastData.priorities || []).forEach((p, i) => txt += `${i+1}. ${p}\n`);
-  navigator.clipboard.writeText(txt).then(() => {
-    const b = document.querySelector('.action-btn');
-    b.textContent = '已複製 ✓';
-    setTimeout(() => b.textContent = '複製報告', 2000);
+function cp(){
+  navigator.clipboard.writeText(document.getElementById('out').value).then(()=>{
+    const b=document.getElementById('cb');b.textContent='å·²è¤è£½ â';
+    setTimeout(()=>b.textContent='è¤è£½åæè«æ±',2000);
   });
 }
-
-// ─── Sync to Sheets ───────────────────────────────────────
-async function syncToSheet() {
-  if (!lastData) return;
-  const sheetUrl = localStorage.getItem('seo_sheet_url') || '';
-  if (!sheetUrl) { alert('請先在設定中填入 Google Sheets Web App URL'); toggleConfig(); return; }
-
-  const btn = document.getElementById('syncBtn');
-  btn.disabled = true;
-  btn.textContent = '同步中...';
-
-  const payload = {
-    timestamp: new Date().toLocaleString('zh-TW'),
-    article_title: document.getElementById('articleTitle').value || '（未填核心關鍵字）',
-    reviewer: document.getElementById('reviewer').value || '',
-    url: document.getElementById('urlInput').value || '',
-    score_seo: lastData.scores.seo || 0,
-    score_aeo: lastData.scores.aeo || 0,
-    score_geo: lastData.scores.geo || 0,
-    score_eeat: lastData.scores.eeat || 0,
-    score_overall: lastData._overall || 0,
-    priority_1: (lastData.priorities || [])[0] || '',
-    priority_2: (lastData.priorities || [])[1] || '',
-    priority_3: (lastData.priorities || [])[2] || '',
-    priority_4: (lastData.priorities || [])[3] || '',
-    priority_5: (lastData.priorities || [])[4] || '',
-    tip_seo: (lastData.details?.seo?.tip) || '',
-    tip_aeo: (lastData.details?.aeo?.tip) || '',
-    tip_geo: (lastData.details?.geo?.tip) || '',
-    tip_eeat: (lastData.details?.eeat?.tip) || ''
-  };
-
-  try {
-    await fetch(sheetUrl, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-    const r = document.getElementById('syncResult');
-    r.className = 'sync-result ok';
-    r.innerHTML = '✅ 已成功同步至 Google Sheets！';
-    btn.textContent = '已同步 ✓';
-    setTimeout(() => { btn.textContent = '同步至 Sheets ↗'; btn.disabled = false; }, 3000);
-  } catch(err) {
-    const r = document.getElementById('syncResult');
-    r.className = 'sync-result err';
-    r.innerHTML = '❌ 同步失敗，請確認 Web App URL 是否正確。';
-    btn.textContent = '同步至 Sheets ↗';
-    btn.disabled = false;
-  }
+async function sync(){
+  const raw=document.getElementById('ji').value.trim();
+  if(!raw){showMsg('è«åè²¼å¥ Claude åè¦ç JSON çµæ','err');return;}
+  let d;
+  try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');d=JSON.parse(raw.slice(s,e+1));}
+  catch{showMsg('JSON æ ¼å¼é¯èª¤ï¼è«ç¢ºèªå®æ´è²¼å¥','err');return;}
+  const btn=document.getElementById('sb');btn.disabled=true;btn.textContent='åæ­¥ä¸­...';
+  const p={timestamp:new Date().toLocaleString('zh-TW'),keyword:document.getElementById('kw').value||'',reviewer:document.getElementById('rv').value||'',url:document.getElementById('url').value||'',score_seo:d.scores?.seo||0,score_aeo:d.scores?.aeo||0,score_geo:d.scores?.geo||0,score_eeat:d.scores?.eeat||0,score_overall:d.score_overall||0,tip_seo:d.details?.seo?.tip||'',tip_aeo:d.details?.aeo?.tip||'',tip_geo:d.details?.geo?.tip||'',tip_eeat:d.details?.eeat?.tip||'',priority_1:(d.priorities||[])[0]||'',priority_2:(d.priorities||[])[1]||'',priority_3:(d.priorities||[])[2]||'',priority_4:(d.priorities||[])[3]||'',priority_5:(d.priorities||[])[4]||''};
+  try{
+    await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
+    showMsg('â å·²æååæ­¥è³ Google Sheetsï¼','ok');
+    btn.textContent='å·²åæ­¥ â';setTimeout(()=>{btn.textContent='åæ­¥è³ Sheets â';btn.disabled=false;},3000);
+  }catch(e){showMsg('â åæ­¥å¤±æï¼'+e.message,'err');btn.textContent='åæ­¥è³ Sheets â';btn.disabled=false;}
 }
-
-// ─── Init ─────────────────────────────────────────────────
-loadConfig();
+function showMsg(t,c){const el=document.getElementById('msg');el.textContent=t;el.className='msg '+c;}
 </script>
 </body>
 </html>

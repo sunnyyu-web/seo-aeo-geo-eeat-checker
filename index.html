@@ -84,7 +84,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 <div class="card">
   <span class="lbl">文章 URL <span class="req">*</span> <span class="hint">（必填）</span></span>
   <div style="margin-bottom:12px">
-    <input type="text" id="url" placeholder="https://yoursite.com/article-slug" oninput="ce()">
+    <input type="text" id="url" placeholder="https://yoursite.com/article-slug" oninput="clearErr()">
     <div class="ue" id="ue">⚠ 請填入文章 URL</div>
   </div>
   <span class="lbl" style="margin-bottom:4px">補充內容 <span class="hint">（選填｜Meta Description、H2 結構等）</span></span>
@@ -104,14 +104,14 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 <div class="card" style="margin-bottom:14px">
   <span class="lbl" style="margin-bottom:8px">審查維度</span>
   <div class="chips">
-    <div class="chip on" data-d="seo" onclick="tog(this)"><span class="pip"></span>SEO 搜尋引擎</div>
-    <div class="chip on" data-d="aeo" onclick="tog(this)"><span class="pip"></span>AEO 答案引擎</div>
-    <div class="chip on" data-d="geo" onclick="tog(this)"><span class="pip"></span>GEO 生成式引擎</div>
-    <div class="chip on" data-d="eeat" onclick="tog(this)"><span class="pip"></span>EEAT 可信度</div>
+    <div class="chip on" data-d="seo" onclick="toggleDim(this)"><span class="pip"></span>SEO 搜尋引擎</div>
+    <div class="chip on" data-d="aeo" onclick="toggleDim(this)"><span class="pip"></span>AEO 答案引擎</div>
+    <div class="chip on" data-d="geo" onclick="toggleDim(this)"><span class="pip"></span>GEO 生成式引擎</div>
+    <div class="chip on" data-d="eeat" onclick="toggleDim(this)"><span class="pip"></span>EEAT 可信度</div>
   </div>
 </div>
 
-<button class="run" onclick="gen()">產生分析請求 →</button>
+<button class="run" id="runBtn" onclick="generatePrompt()">產生分析請求 →</button>
 
 <div class="out-section" id="outSection">
   <div class="out-card">
@@ -121,7 +121,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </h3>
     <textarea class="out-ta" id="outTa" readonly></textarea>
     <div class="btn-row">
-      <button class="btn-g" id="copyBtn" onclick="cp()">複製分析請求</button>
+      <button class="btn-g" id="copyBtn" onclick="copyPrompt()">複製分析請求</button>
       <a href="https://claude.ai" target="_blank" class="btn-w">開啟 Claude ↗</a>
     </div>
   </div>
@@ -134,7 +134,7 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
     </ol>
     <textarea id="jiTa" style="min-height:80px;font-size:12px;font-family:'DM Mono',monospace" placeholder='{"scores":{"seo":82,"aeo":75,"geo":70,"eeat":80},"score_overall":77,...}'></textarea>
     <div class="btn-row">
-      <button class="btn-g" id="syncBtn" onclick="sync()">同步至 Sheets ↗</button>
+      <button class="btn-g" id="syncBtn" onclick="syncToSheets()">同步至 Sheets ↗</button>
       <a class="btn-w" href="https://docs.google.com/spreadsheets/d/19JPuIHgnc7IgKsQjz6W6n0CmS0-Je98IhRf4dT15d84/edit" target="_blank">開啟共用 Sheets 📊</a>
     </div>
     <div class="msg" id="msg"></div>
@@ -147,66 +147,114 @@ textarea{resize:vertical;min-height:80px;line-height:1.6}
 
 </div>
 <script>
-const SU='https://script.google.com/macros/s/AKfycbzmk1-4op5B6wLXX594PW6ZhDapOGDJ6jF1YPQTb0Cl33b_p18iK0e2sV1CAQ7YluY/exec';
-const dims=new Set(['seo','aeo','geo','eeat']);
-const DL={seo:'SEO 搜尋引擎優化',aeo:'AEO 答案引擎優化',geo:'GEO 生成式引擎優化',eeat:'EEAT 可信度'};
-function tog(el){const d=el.dataset.d;dims.has(d)?dims.delete(d):dims.add(d);el.classList.toggle('on',dims.has(d));}
-function ce(){document.getElementById('ue').style.display='none';document.getElementById('url').style.borderColor='';}
-function gen(){
-  const url=document.getElementById('url').value.trim();
-  if(!url){document.getElementById('ue').style.display='block';document.getElementById('url').style.borderColor='var(--rd)';document.getElementById('url').focus();return;}
-  if(!dims.size){alert('請至少勾選一個審查維度');return;}
-  const ex=document.getElementById('ex').value.trim(),kw=document.getElementById('kw').value.trim(),rv=document.getElementById('rv').value.trim();
-  const ds=[...dims].map(d=>DL[d]).join('、');
-  let p='請幫我審查這篇文章的 '+ds+' 表現：
+var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzmk1-4op5B6wLXX594PW6ZhDapOGDJ6jF1YPQTb0Cl33b_p18iK0e2sV1CAQ7YluY/exec';
+var dims = new Set(['seo','aeo','geo','eeat']);
+var DL = {seo:'SEO 搜尋引擎優化',aeo:'AEO 答案引擎優化',geo:'GEO 生成式引擎優化',eeat:'EEAT 可信度'};
 
-文章 URL：'+url+'
-';
-  if(kw)p+='核心關鍵字：'+kw+'
-';
-  if(rv)p+='負責人：'+rv+'
-';
-  if(ex)p+='
-補充資訊：
-'+ex+'
-';
-  p+='
-請依各維度提供：
-① 0-100 分
-② 至少 6 項具體檢查（✅通過 / ⚠️待改善 / ❌未達標）
-③ 該維度最重要的改善建議（一句話）
-
-';
-  p+='最後請輸出以下 JSON（請直接輸出，不要加 markdown）：
-';
-  p+='{"scores":{"seo":分數,"aeo":分數,"geo":分數,"eeat":分數},"score_overall":加權分數,"details":{"seo":{"tip":"建議"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["優先改善1","優先改善2","優先改善3","優先改善4","優先改善5"]}
-';
-  p+='（加權：SEO 30%+AEO 25%+GEO 25%+EEAT 20%）';
-  document.getElementById('outTa').value=p;
-  document.getElementById('outSection').classList.add('show');
-  setTimeout(()=>document.getElementById('outSection').scrollIntoView({behavior:'smooth',block:'start'}),100);
+function toggleDim(el) {
+  var d = el.dataset.d;
+  if (dims.has(d)) { dims.delete(d); } else { dims.add(d); }
+  el.classList.toggle('on', dims.has(d));
 }
-function cp(){
-  navigator.clipboard.writeText(document.getElementById('outTa').value).then(()=>{
-    const b=document.getElementById('copyBtn');b.textContent='已複製 ✓';
-    setTimeout(()=>b.textContent='複製分析請求',2000);
+
+function clearErr() {
+  document.getElementById('ue').style.display = 'none';
+  document.getElementById('url').style.borderColor = '';
+}
+
+function generatePrompt() {
+  var url = document.getElementById('url').value.trim();
+  if (!url) {
+    document.getElementById('ue').style.display = 'block';
+    document.getElementById('url').style.borderColor = '#C0392B';
+    document.getElementById('url').focus();
+    return;
+  }
+  if (dims.size === 0) { alert('請至少勾選一個審查維度'); return; }
+
+  var ex = document.getElementById('ex').value.trim();
+  var kw = document.getElementById('kw').value.trim();
+  var rv = document.getElementById('rv').value.trim();
+  var ds = Array.from(dims).map(function(d){ return DL[d]; }).join('、');
+
+  var p = '請幫我審查這篇文章的 ' + ds + ' 表現：\n\n';
+  p += '文章 URL：' + url + '\n';
+  if (kw) p += '核心關鍵字：' + kw + '\n';
+  if (rv) p += '負責人：' + rv + '\n';
+  if (ex) p += '\n補充資訊：\n' + ex + '\n';
+  p += '\n請依各維度提供：\n';
+  p += '① 0-100 分\n';
+  p += '② 至少 6 項具體檢查（✅通過 / ⚠️待改善 / ❌未達標）\n';
+  p += '③ 該維度最重要的改善建議（一句話）\n\n';
+  p += '最後請輸出以下 JSON（請直接輸出，不要加 markdown）：\n';
+  p += '{"scores":{"seo":分數,"aeo":分數,"geo":分數,"eeat":分數},"score_overall":加權分數,"details":{"seo":{"tip":"建議"},"aeo":{"tip":"..."},"geo":{"tip":"..."},"eeat":{"tip":"..."}},"priorities":["\u512a\u5148\u6539\u55841","\u512a\u5148\u6539\u55842","\u512a\u5148\u6539\u55843","\u512a\u5148\u6539\u55844","\u512a\u5148\u6539\u55845"]}\n';
+  p += '（加權：SEO 30% + AEO 25% + GEO 25% + EEAT 20%）';
+
+  document.getElementById('outTa').value = p;
+  document.getElementById('outSection').classList.add('show');
+  setTimeout(function(){ document.getElementById('outSection').scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+}
+
+function copyPrompt() {
+  navigator.clipboard.writeText(document.getElementById('outTa').value).then(function() {
+    var b = document.getElementById('copyBtn');
+    b.textContent = '已複製 ✓';
+    setTimeout(function(){ b.textContent = '複製分析請求'; }, 2000);
   });
 }
-async function sync(){
-  const raw=document.getElementById('jiTa').value.trim();
-  if(!raw){showMsg('請先貼入 Claude 回覆的 JSON 結果','err');return;}
-  let d;
-  try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');d=JSON.parse(raw.slice(s,e+1));}
-  catch{showMsg('JSON 格式錯誤，請確認完整貼入','err');return;}
-  const btn=document.getElementById('syncBtn');btn.disabled=true;btn.textContent='同步中...';
-  const p={timestamp:new Date().toLocaleString('zh-TW'),keyword:document.getElementById('kw').value||'',reviewer:document.getElementById('rv').value||'',url:document.getElementById('url').value||'',score_seo:d.scores?.seo||0,score_aeo:d.scores?.aeo||0,score_geo:d.scores?.geo||0,score_eeat:d.scores?.eeat||0,score_overall:d.score_overall||0,tip_seo:d.details?.seo?.tip||'',tip_aeo:d.details?.aeo?.tip||'',tip_geo:d.details?.geo?.tip||'',tip_eeat:d.details?.eeat?.tip||'',priority_1:(d.priorities||[])[0]||'',priority_2:(d.priorities||[])[1]||'',priority_3:(d.priorities||[])[2]||'',priority_4:(d.priorities||[])[3]||'',priority_5:(d.priorities||[])[4]||''};
-  try{
-    await fetch(SU,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)});
-    showMsg('✅ 已成功同步至 Google Sheets！','ok');
-    btn.textContent='已同步 ✓';setTimeout(()=>{btn.textContent='同步至 Sheets ↗';btn.disabled=false;},3000);
-  }catch(e){showMsg('❌ 同步失敗：'+e.message,'err');btn.textContent='同步至 Sheets ↗';btn.disabled=false;}
+
+function syncToSheets() {
+  var raw = document.getElementById('jiTa').value.trim();
+  if (!raw) { showMsg('請先貼入 Claude 回覆的 JSON 結果', 'err'); return; }
+  var d;
+  try {
+    var s = raw.indexOf('{'), e = raw.lastIndexOf('}');
+    d = JSON.parse(raw.slice(s, e + 1));
+  } catch(err) { showMsg('JSON 格式錯誤，請確認完整貼入', 'err'); return; }
+
+  var btn = document.getElementById('syncBtn');
+  btn.disabled = true; btn.textContent = '同步中...';
+
+  var p = {
+    timestamp: new Date().toLocaleString('zh-TW'),
+    keyword: document.getElementById('kw').value || '',
+    reviewer: document.getElementById('rv').value || '',
+    url: document.getElementById('url').value || '',
+    score_seo: (d.scores && d.scores.seo) || 0,
+    score_aeo: (d.scores && d.scores.aeo) || 0,
+    score_geo: (d.scores && d.scores.geo) || 0,
+    score_eeat: (d.scores && d.scores.eeat) || 0,
+    score_overall: d.score_overall || 0,
+    tip_seo: (d.details && d.details.seo && d.details.seo.tip) || '',
+    tip_aeo: (d.details && d.details.aeo && d.details.aeo.tip) || '',
+    tip_geo: (d.details && d.details.geo && d.details.geo.tip) || '',
+    tip_eeat: (d.details && d.details.eeat && d.details.eeat.tip) || '',
+    priority_1: (d.priorities && d.priorities[0]) || '',
+    priority_2: (d.priorities && d.priorities[1]) || '',
+    priority_3: (d.priorities && d.priorities[2]) || '',
+    priority_4: (d.priorities && d.priorities[3]) || '',
+    priority_5: (d.priorities && d.priorities[4]) || ''
+  };
+
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(p)
+  }).then(function() {
+    showMsg('✅ 已成功同步至 Google Sheets！', 'ok');
+    btn.textContent = '已同步 ✓';
+    setTimeout(function(){ btn.textContent = '同步至 Sheets ↗'; btn.disabled = false; }, 3000);
+  }).catch(function(err) {
+    showMsg('❌ 同步失敗：' + err.message, 'err');
+    btn.textContent = '同步至 Sheets ↗'; btn.disabled = false;
+  });
 }
-function showMsg(t,c){const el=document.getElementById('msg');el.textContent=t;el.className='msg '+c;}
+
+function showMsg(t, c) {
+  var el = document.getElementById('msg');
+  el.textContent = t; el.className = 'msg ' + c;
+}
 </script>
 </body>
 </html>
